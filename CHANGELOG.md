@@ -12,6 +12,8 @@ nav_order: 1
 
 ## [MAJOR.MINOR.PATCH] - YYYY-MM-DD
 
+## [4.44.0] - 2025-08-07
+
 - test release 1
 
 ## [4.43.0] - 2025-07-22
