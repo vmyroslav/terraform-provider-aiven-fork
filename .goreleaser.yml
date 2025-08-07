@@ -47,6 +47,6 @@ checksum:
 release:
   draft: true
   extra_files:
-    - glob: ./dist/aiven-terraform-provider-policies-{{ .Version }}.tar.gz
+    - glob: ./opa/dist/aiven-terraform-provider-policies-{{ .Version }}.tar.gz
 changelog:
   disable: true
