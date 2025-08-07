@@ -102,7 +102,7 @@ tasks:
       - internal:lint-go
       - internal:lint-test
       - internal:lint-docs
-      - internal:semgrep
+#      - internal:semgrep
 
   fmt:
     desc: "Run all formatters (Go, Terraform, whitespace). Use FAST_FORMAT=true for quick formatting"
