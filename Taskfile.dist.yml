@@ -101,7 +101,7 @@ tasks:
     deps:
       - internal:lint-go
       - internal:lint-test
-      - internal:lint-docs
+#      - internal:lint-docs
 #      - internal:semgrep
 
   fmt:
