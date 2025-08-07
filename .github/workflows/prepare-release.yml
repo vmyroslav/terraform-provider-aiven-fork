@@ -183,7 +183,6 @@ jobs:
             }
 
             await postStatus('go_test', '${{ needs.run_unit_tests.result }}', 'Unit tests failed');
-#            await postStatus('dependency-review', '${{ needs.run_dependency_review.result }}', 'Dependency review failed');
             await postStatus('Acceptance Tests', '${{ needs.run_acceptance_tests.result }}', 'Acceptance tests failed');
 
             await github.rest.repos.createCommitStatus({
