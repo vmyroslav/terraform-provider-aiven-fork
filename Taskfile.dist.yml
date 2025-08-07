@@ -190,16 +190,15 @@ tasks:
     vars:
       VERSION: '{{.VERSION | default "dev"}}'
       BUNDLE_NAME: "aiven-terraform-provider-policies"
-      # 1. Output directory changed to `build/` to avoid conflicts with GoReleaser
       OUTPUT_FILE: "./opa/dist/{{.BUNDLE_NAME}}-{{.VERSION}}.tar.gz"
     cmds:
       - task: opa:fmt
       - mkdir -p opa/dist
       - |
-        {{.OPA}} build ./opa/policies \
-          --output {{.OUTPUT_FILE}} \
-          --revision {{.VERSION}} \
-          --ignore '.*_test.rego'
+        opa build --bundle ./opa/policies \
+        --output {{.OUTPUT_FILE}} \
+        --revision {{.VERSION}} \
+        --ignore "*_test.rego"
       - 'echo "✅ Bundle created: {{.OUTPUT_FILE}}"'
       - bash -c 'stat -f%z {{.OUTPUT_FILE}} 2>/dev/null | numfmt --to=iec-i --suffix=B | xargs echo "Bundle size:"'
 

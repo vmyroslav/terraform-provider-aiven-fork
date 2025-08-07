@@ -37,3 +37,15 @@ terraform show -json tfplan.out > tfplan.json
 # 2. Run policy validation
 conftest test --policy policies --namespace aiven.provider.policies.conflicting tfplan.json
 ```
+
+OPA EVAL
+opa eval \
+--bundle ./opa/dist/aiven-terraform-provider-policies-dev.tar.gz \
+--input ./opa/plan.json \
+data.aiven.main
+
+FIRST UNPACK
+conftest test \
+--policy ./opa/policies \
+--namespace aiven.main \
+./opa/plan.json
