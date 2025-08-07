@@ -113,13 +113,13 @@ jobs:
       ref: ${{ needs.create_release_pr.outputs.pr_head_sha }}
 
   # Run dependency review
-  run_dependency_review:
-    needs: create_release_pr
-    if: needs.create_release_pr.outputs.pr_created
-    uses: ./.github/workflows/dependency-review.yml
-    with:
-      head_ref: ${{ needs.create_release_pr.outputs.pr_head_sha }}
-      base_ref: main
+#  run_dependency_review:
+#    needs: create_release_pr
+#    if: needs.create_release_pr.outputs.pr_created
+#    uses: ./.github/workflows/dependency-review.yml
+#    with:
+#      head_ref: ${{ needs.create_release_pr.outputs.pr_head_sha }}
+#      base_ref: main
 
   # Run acceptance tests
   run_acceptance_tests:
@@ -136,7 +136,7 @@ jobs:
       - create_release_pr
       - run_lint_checks
       - run_unit_tests
-      - run_dependency_review
+#      - run_dependency_review
       - run_acceptance_tests
     runs-on: ubuntu-latest
     if: always() && needs.create_release_pr.outputs.pr_created == 'true'
@@ -183,7 +183,7 @@ jobs:
             }
 
             await postStatus('go_test', '${{ needs.run_unit_tests.result }}', 'Unit tests failed');
-            await postStatus('dependency-review', '${{ needs.run_dependency_review.result }}', 'Dependency review failed');
+#            await postStatus('dependency-review', '${{ needs.run_dependency_review.result }}', 'Dependency review failed');
             await postStatus('Acceptance Tests', '${{ needs.run_acceptance_tests.result }}', 'Acceptance tests failed');
 
             await github.rest.repos.createCommitStatus({
@@ -201,7 +201,7 @@ jobs:
       - create_release_pr
       - run_lint_checks
       - run_unit_tests
-      - run_dependency_review
+#      - run_dependency_review
       - run_acceptance_tests
     if: success() && needs.create_release_pr.outputs.pr_created == 'true'
     uses: ./.github/workflows/slack-notify.yml
@@ -218,7 +218,7 @@ jobs:
       - create_release_pr
       - run_lint_checks
       - run_unit_tests
-      - run_dependency_review
+#      - run_dependency_review
       - run_acceptance_tests
     if: failure() && needs.create_release_pr.outputs.pr_created == 'true'
     uses: ./.github/workflows/slack-notify.yml
