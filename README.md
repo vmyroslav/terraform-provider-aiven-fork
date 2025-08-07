@@ -58,6 +58,45 @@ Some properties, like **project** and the **resource name**, cannot be changed a
 
 To avoid any issues, **please set the `termination_protection` property to `true` on all production services**, it will prevent Terraform to remove the service until the flag is set back to `false` again. While it prevents a service to be deleted, any logical databases, topics or other configurations may be removed **even when this section is enabled**. Be very careful!
 
+## Policy Validation with OPA
+
+We provide [Open Policy Agent (OPA)](https://www.openpolicyagent.org/) policy bundles to help validate your Terraform configurations and prevent common issues before deployment.
+
+### Quick Start with Policies
+
+1. **Download the latest policy bundle** from our [releases page](https://github.com/aiven/terraform-provider-aiven/releases):
+   ```bash
+   curl -LO https://github.com/aiven/terraform-provider-aiven/releases/latest/download/aiven-terraform-provider-policies-1.0.0.tar.gz
+   ```
+
+2. **Install Conftest**:
+   ```bash
+   brew install conftest  # macOS
+   # or download from https://github.com/open-policy-agent/conftest/releases
+   ```
+
+3. **Validate your Terraform plan**:
+   ```bash
+   terraform plan -out=tfplan.out
+   terraform show -json tfplan.out > tfplan.json
+   conftest test --bundle aiven-terraform-provider-policies-1.0.0.tar.gz tfplan.json
+   ```
+
+### Available Policies
+
+Our policy bundle helps prevent:
+- **Duplicate resource conflicts** - Prevents creating multiple resources that target the same entity
+- **Autoscaler integration conflicts** - Avoids issues when removing autoscalers while modifying services
+- **ClickHouse grant duplicates** - Ensures only one grant resource per role/user combination
+
+### CI/CD Integration
+
+See our [detailed usage guide](opa/policies/USAGE.md) for examples of integrating these policies into:
+- GitHub Actions
+- GitLab CI
+- Azure DevOps
+- And combining with your own custom policies
+
 ## Contributing
 
 Bug reports and patches are very welcome, please post them as GitHub issues and pull requests at https://github.com/aiven/terraform-provider-aiven. Please review the guides below.

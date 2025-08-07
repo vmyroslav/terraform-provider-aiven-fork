@@ -188,10 +188,18 @@ tasks:
     deps:
       - internal:opa:verify
       - opa:test
+    vars:
+      VERSION: '{{.VERSION | default "dev"}}'
+      BUNDLE_NAME: "aiven-terraform-provider-policies"
+      OUTPUT_FILE: "./dist/{{.BUNDLE_NAME}}-{{.VERSION}}.tar.gz"
     cmds:
-      - mkdir -p dist
       - task: opa:fmt
-      - "{{.OPA}} build ./opa/policies/ --bundle --output ./dist/aiven-terraform-policies.tar.gz"
+      - mkdir -p dist
+      - bash -c 'if [ "{{.VERSION}}" != "dev" ]; then echo "Updating manifest with version {{.VERSION}}"; jq --arg version "{{.VERSION}}" --arg created_at "$(date -u +%Y-%m-%dT%H:%M:%SZ)" ".revision = \$version | .metadata.version = \$version | .metadata.created_at = \$created_at" ./opa/policies/.manifest > ./opa/policies/.manifest.tmp; mv ./opa/policies/.manifest.tmp ./opa/policies/.manifest; fi'
+      - "{{.OPA}} build ./opa/policies/ --bundle --output {{.OUTPUT_FILE}}"
+      - 'echo "✅ Bundle created: {{.OUTPUT_FILE}}"'
+      - bash -c 'stat -f%z {{.OUTPUT_FILE}} | numfmt --to=iec-i --suffix=B | xargs echo "Bundle size:"'
+      - 'echo "To test locally: conftest test --bundle {{.OUTPUT_FILE}} your-terraform-plan.json"'
 
   opa:fmt:
     desc: "Format OPA policy files"
