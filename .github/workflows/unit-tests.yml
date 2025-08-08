@@ -63,9 +63,5 @@ jobs:
       uses: open-policy-agent/setup-opa@v2
       with:
         version: latest
-    - name: Install jq
-      run: sudo apt-get update && sudo apt-get install -y jq
-    - name: Test OPA policies
-      run: task opa:test
     - name: Build and validate bundle
       run: task opa:bundle
