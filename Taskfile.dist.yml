@@ -200,7 +200,6 @@ tasks:
         --revision {{.VERSION}} \
         --ignore "*_test.rego"
       - 'echo "✅ Bundle created: {{.OUTPUT_FILE}}"'
-      - bash -c 'stat -f%z {{.OUTPUT_FILE}} 2>/dev/null | numfmt --to=iec-i --suffix=B | xargs echo "Bundle size:"'
 
   opa:fmt:
     desc: "Format OPA policy files"
